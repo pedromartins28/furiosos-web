@@ -1,7 +1,7 @@
 <template>
-  <router-view />
+  <q-layout view="hHh Lpr fFf">
+    <router-view />
+  </q-layout>
 </template>
 
-<script setup>
-//
-</script>
+<script setup></script>
