@@ -1,5 +1,6 @@
 // src/router/routes.js
 import MainLayout from 'layouts/MainLayout.vue'
+import AuthLayout from 'layouts/AuthLayout.vue'
 import AuthPage from 'pages/AuthPage.vue'
 
 const routes = [
@@ -11,31 +12,42 @@ const routes = [
       {
         path: '',
         component: () => import('pages/HomePage.vue')
-      },
-      {
-        path: 'cadastro',
-        component: () => import('pages/CadastroPage.vue')
-      },
-      {
-        path: 'interesses',
-        component: () => import('pages/InteressesPage.vue')
       }
     ]
   },
   {
     path: '/auth',
-    component: MainLayout,
+    component: AuthLayout,
     children: [
       {
         path: '',
         component: AuthPage
+      },
+      {
+        path: 'redirect',
+        component: () => import('pages/AuthRedirect.vue')
       }
     ]
+  },
+  {
+    path: '/cadastro',
+    component: AuthLayout,
+    children: [
+      {
+        path: '',
+        component: () => import('pages/CadastroPage.vue')
+      }
+    ]
+  },
+  {
+    path: '/auth/redirect',
+    component: () => import('pages/AuthRedirect.vue')
   },
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')
   }
 ]
+
 
 export default routes

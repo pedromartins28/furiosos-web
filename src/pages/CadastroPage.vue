@@ -1,40 +1,64 @@
+
 <template>
   <q-page class="q-pa-md">
     <q-form @submit.prevent="handleSubmit">
-      <q-card class="q-pa-md q-mx-auto" style="max-width: 500px;">
+      <q-card class="q-pa-md q-mx-auto" style="max-width: 500px;" bordered>
+        <q-inner-loading :showing="carregandoDocumento" label="Analisando documento..." />
+
         <q-card-section>
           <div class="text-h6">
             {{ etapa === 1 ? 'Informações Básicas' : 'Anexar Documento de Identidade' }}
           </div>
         </q-card-section>
 
-        <q-card-section v-if="etapa === 1">
-          <q-input v-model="form.nome" label="Nome" required />
-          <q-input v-model="form.cpf" label="CPF" required class="q-mt-md" />
-          <q-input v-model="form.endereco" label="Endereço" class="q-mt-md" />
-          <q-input v-model="form.data_nascimento" label="Data de Nascimento" type="date" class="q-mt-md" />
-        </q-card-section>
+        <transition name="fade" mode="out-in">
+          <q-card-section v-if="etapa === 1" key="etapa1">
+            <q-input v-model="form.nome" label="Nome" required />
+            <q-input v-model="form.cpf" label="CPF" required class="q-mt-md" mask="###.###.###-##" fill-mask/>
+            <q-input v-model="form.endereco" label="Endereço" class="q-mt-md" />
+            <q-input v-model="form.data_nascimento" label="Data de Nascimento" type="date" class="q-mt-md" />
+          </q-card-section>
 
-        <q-card-section v-if="etapa === 2">
-          <q-file
-            v-model="documento"
-            label="Documento de Identidade (JPG/PNG)"
-            class="q-mt-md"
-            filled
-            accept=".jpg,.jpeg,.png"
-          />
-          <q-banner v-if="documentoErro" class="q-mt-sm bg-red-1 text-red" dense rounded>
-            {{ documentoErro }}
-          </q-banner>
-        </q-card-section>
+          <q-card-section v-else key="etapa2">
+            <q-file
+              v-model="documento"
+              label="Documento de Identidade (JPG/PNG)"
+              class="q-mt-md"
+              filled
+              accept=".jpg,.jpeg,.png"
+            />
+            <q-banner v-if="documentoErro" class="q-mt-sm bg-red-1 text-red" dense rounded>
+              {{ documentoErro }}
+            </q-banner>
+          </q-card-section>
+        </transition>
 
         <q-card-actions align="right">
           <q-btn v-if="etapa === 1" label="Próximo" color="primary" @click="etapa = 2" />
-          <q-btn v-else label="Prosseguir" color="primary" type="submit" />
-          <q-btn v-if="etapa === 2 && documentoErro" label="Enviar Documento Depois" flat @click="pularDocumento" />
+
+          <q-btn v-if="etapa === 2" label="Voltar" flat @click="etapa = 1" />
+
+          <q-btn v-if="etapa === 2" label="Prosseguir" color="primary" type="submit" />
+
+          <q-btn
+            v-if="etapa === 2 && documentoErro"
+            label="Enviar Documento Depois"
+            flat
+            @click="pularDocumento"
+          />
         </q-card-actions>
       </q-card>
     </q-form>
+
+    <q-dialog v-model="documentoAprovado" persistent transition-show="fade" transition-hide="fade">
+      <q-card class="bg-green text-white q-pa-lg">
+        <q-card-section class="row items-center q-gutter-sm">
+          <q-icon name="check_circle" size="40px" />
+          <div class="text-h6">Documento aprovado com sucesso!</div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
   </q-page>
 </template>
 
@@ -42,11 +66,12 @@
 import { ref } from 'vue'
 import { supabase } from 'boot/supabase'
 import { useRouter } from 'vue-router'
-import Tesseract from 'tesseract.js'
-import { useQuasar } from 'quasar'
+import axios from 'axios'
 
 const router = useRouter()
+const documentoAprovado = ref(false)
 const etapa = ref(1)
+const carregandoDocumento = ref(false)
 
 const form = ref({
   nome: '',
@@ -55,23 +80,32 @@ const form = ref({
   data_nascimento: ''
 })
 
-
-const $q = useQuasar()
 const documento = ref(null)
 const documentoErro = ref('')
 const documento_url = ref(null)
 
 async function validarDocumentoComOCR(file, nome, cpf) {
-  const result = await Tesseract.recognize(file, 'por', {
-    logger: m => console.log(m)
-  })
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('nome', nome)
+  formData.append('cpf', cpf)
 
-  const texto = result.data.text.toLowerCase()
-  const nomeOk = texto.includes(nome.toLowerCase())
-  const cpfOk = texto.includes(cpf.replace(/\D/g, ''))
+  try {
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/analisar-documento`,
+      formData,
+      {
+        headers: {
+         
+        }
+      }
+    )
 
-  if (!nomeOk || !cpfOk) {
-    throw new Error('Nome ou CPF não encontrados no documento.')
+    if (!data.valido) {
+      throw new Error(data.erro)
+    }
+  } catch (error) {
+    throw new Error(error.response?.data?.erro || 'Erro ao validar documento.')
   }
 }
 
@@ -80,7 +114,6 @@ async function uploadDocumento(userId) {
 
   const file = documento.value
 
-  // Sanitiza nome do arquivo
   const sanitizedFileName = file.name
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -121,21 +154,12 @@ async function handleSubmit() {
 
   if (documento.value) {
     try {
-      if ($q?.loading?.show) {
-        $q.loading.show({ message: 'Processando documento com IA...' })
-      }
-
+      carregandoDocumento.value = true
       await validarDocumentoComOCR(documento.value, form.value.nome, form.value.cpf)
       documento_url.value = await uploadDocumento(userId)
-
-      if ($q?.loading?.hide) {
-        $q.loading.hide()
-      }
-
+      carregandoDocumento.value = false
     } catch (err) {
-      if ($q?.loading?.hide) {
-        $q.loading.hide()
-      }
+      carregandoDocumento.value = false
       documentoErro.value = err.message
       return
     }
@@ -154,7 +178,10 @@ async function handleSubmit() {
   if (error) {
     alert('Erro ao salvar dados: ' + error.message)
   } else {
-    router.push('/interesses')
+    documentoAprovado.value = true
+      setTimeout(() => {
+        router.push('/')
+      }, 1800)
   }
 }
 
@@ -164,3 +191,14 @@ function pularDocumento() {
   handleSubmit()
 }
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

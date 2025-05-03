@@ -53,12 +53,19 @@ async function signUp() {
     return
   }
 
-  checkProfile()
+  alert('Cadastro realizado! Verifique seu e-mail para confirmar sua conta.')
 }
 
 async function checkProfile() {
-  const user = await supabase.auth.getUser()
-  const userId = user.data.user.id
+  const { data: userData, error } = await supabase.auth.getUser()
+
+  if (error || !userData?.user) {
+    alert('Usuário não autenticado. Faça login para continuar.')
+    router.push('/auth')
+    return
+  }
+
+  const userId = userData.user.id
 
   const { data } = await supabase
     .from('users')
@@ -69,7 +76,7 @@ async function checkProfile() {
   if (!data?.nome) {
     router.push('/cadastro')
   } else if (!data?.interesses || data.interesses.length === 0) {
-    router.push('/interesses')
+    router.push('/')
   } else {
     router.push('/')
   }
