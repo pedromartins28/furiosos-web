@@ -69,7 +69,7 @@ async function checkProfile() {
 
   const userId = userData.user.id
 
-  const { data, error: selectError } = await supabase
+  const { error: selectError } = await supabase
     .from('users')
     .select('id')
     .eq('id', userId)
