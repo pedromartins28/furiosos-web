@@ -12,14 +12,15 @@
 <script setup>
 const clientId = import.meta.env.VITE_INSTAGRAM_CLIENT_ID
 const redirectUri = import.meta.env.VITE_INSTAGRAM_REDIRECT_URI
+const { data } = await supabase.auth.getUser()
+const userId = data?.user?.id
 
-// Escopo completo corrigido
 const escopo = [
   'instagram_business_basic',
   'instagram_business_manage_messages',
   'instagram_business_manage_comments',
   'instagram_business_content_publish',
-  'instagram_business_manage_insights' // ✅ corrigido: com "s"
+  'instagram_business_manage_insights' 
 ].join(',')
 
 function iniciarLoginInstagram() {
@@ -32,7 +33,8 @@ function iniciarLoginInstagram() {
     `&client_id=${clientId}` +
     `&redirect_uri=${encodeURIComponent(redirectUri)}` +
     `&response_type=code` +
-    `&scope=${encodeURIComponent(escopo)}`
+    `&scope=${encodeURIComponent(escopo)}` +
+    `&state=${userId}`
 
   window.location.href = authUrl
 }
