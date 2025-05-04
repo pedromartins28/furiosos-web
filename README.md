@@ -6,6 +6,7 @@ Front-end da aplicação **Furiosos**, desenvolvida com [Quasar Framework (Vue.j
 
 - Integração com Instagram via OAuth2
 - Upload de documentos com verificação OCR
+- Verificação de links de perfis em sites de e-sports
 - Notícias e calendário de jogos da FURIA
 - Sistema de login com Supabase
 - Sistema de missões semanais
