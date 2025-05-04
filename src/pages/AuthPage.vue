@@ -1,4 +1,3 @@
-<!-- src/pages/AuthPage.vue -->
 <template>
   <q-page class="q-pa-md flex flex-center">
     <q-card class="q-pa-md" style="width: 400px;">
@@ -45,7 +44,10 @@ async function signIn() {
 async function signUp() {
   const { error } = await supabase.auth.signUp({
     email: email.value,
-    password: password.value
+    password: password.value,
+    options: {
+      emailRedirectTo: 'https://furiosos-web.vercel.app/cadastro'
+    }
   })
 
   if (error) {
@@ -67,15 +69,28 @@ async function checkProfile() {
 
   const userId = userData.user.id
 
-  const { data } = await supabase
+  const { data, error: selectError } = await supabase
+    .from('users')
+    .select('id')
+    .eq('id', userId)
+    .single()
+
+  if (selectError && selectError.code === 'PGRST116') {
+    await supabase.from('users').insert({
+      id: userId,
+      email: userData.user.email
+    })
+  }
+
+  const { data: userInfo } = await supabase
     .from('users')
     .select('nome, interesses')
     .eq('id', userId)
     .single()
 
-  if (!data?.nome) {
+  if (!userInfo?.nome) {
     router.push('/cadastro')
-  } else if (!data?.interesses || data.interesses.length === 0) {
+  } else if (!userInfo?.interesses || userInfo.interesses.length === 0) {
     router.push('/')
   } else {
     router.push('/')
