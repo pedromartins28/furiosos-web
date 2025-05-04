@@ -36,7 +36,12 @@ const routes = [
       {
         path: '',
         component: () => import('pages/CadastroPage.vue')
+      },
+      {
+        path: '/politica',
+        component: () => import('pages/PoliticaPrivacidade.vue')
       }
+      
     ]
   },
   {

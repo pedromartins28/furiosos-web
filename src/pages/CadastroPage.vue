@@ -86,19 +86,15 @@ const documento_url = ref(null)
 
 async function validarDocumentoComOCR(file, nome, cpf) {
   const formData = new FormData()
-  formData.append('file', file)
+
+  formData.append('file', file, file.name)
   formData.append('nome', nome)
   formData.append('cpf', cpf)
 
   try {
     const { data } = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/analisar-documento`,
-      formData,
-      {
-        headers: {
-         
-        }
-      }
+      `${import.meta.env.VITE_API_URL}/api/analisar-documento.js`,
+      formData
     )
 
     if (!data.valido) {
@@ -108,6 +104,7 @@ async function validarDocumentoComOCR(file, nome, cpf) {
     throw new Error(error.response?.data?.erro || 'Erro ao validar documento.')
   }
 }
+
 
 async function uploadDocumento(userId) {
   if (!documento.value) return null
