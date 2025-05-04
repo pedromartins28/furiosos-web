@@ -49,10 +49,6 @@ const routes = [
     ]
   },
   {
-    path: '/auth/redirect',
-    component: () => import('pages/AuthRedirect.vue')
-  },
-  {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')
   }

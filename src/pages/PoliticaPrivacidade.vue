@@ -18,5 +18,8 @@
   </q-page>
 </template>
 
-<script setup>
+<script>
+  export default {
+    name: 'PoliticaPrivacidade'
+  }
 </script>
