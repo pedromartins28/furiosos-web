@@ -113,6 +113,7 @@ const secoes = [
   { label: 'Home', icon: 'home', route: '/' },
   { label: 'Perfil', icon: 'person', route: '/' },
   { label: 'Missões', icon: 'flag', route: '/missoes' },
+  { label: 'Validar Conteúdo', icon: 'check', route: '/validar' },
   { label: 'Loja', icon: 'shopping_cart', route: '/loja' },
   { label: 'Calendário', icon: 'event', route: '/' },
   { label: 'Configurações', icon: 'settings', route: '/' },
