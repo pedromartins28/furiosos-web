@@ -17,7 +17,7 @@ onMounted(async () => {
     router.push('/cadastro')
   } else {
     console.error(error)
-    router.push('/') // fallback
+    router.push('/auth') // fallback
   }
 })
 </script>
