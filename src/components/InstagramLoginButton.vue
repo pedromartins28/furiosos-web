@@ -11,12 +11,17 @@
 
 <script setup>
 import { supabase } from 'boot/supabase'
+import { ref, onMounted } from 'vue'
 
 const clientId = import.meta.env.VITE_INSTAGRAM_CLIENT_ID
 const redirectUri = import.meta.env.VITE_INSTAGRAM_REDIRECT_URI
 
-const { data } = await supabase.auth.getUser()
-const userId = data?.user?.id
+const userId = ref(null)
+
+onMounted(async () => {
+  const { data } = await supabase.auth.getUser()
+  userId.value = data?.user?.id
+})
 
 const escopo = [
   'instagram_business_basic',
@@ -27,7 +32,6 @@ const escopo = [
 ].join(',')
 
 function iniciarLoginInstagram() {
-
   const authUrl = `https://api.instagram.com/oauth/authorize` +
     `?enable_fb_login=0` +
     `&force_authentication=1` +
@@ -35,9 +39,10 @@ function iniciarLoginInstagram() {
     `&redirect_uri=${encodeURIComponent(redirectUri)}` +
     `&response_type=code` +
     `&scope=${encodeURIComponent(escopo)}` +
-    `&state=${userId}`
+    `&state=${userId.value}`
 
   window.location.href = authUrl
 }
 </script>
+
 
