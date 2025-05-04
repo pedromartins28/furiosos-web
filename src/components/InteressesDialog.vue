@@ -1,14 +1,13 @@
-<!-- src/components/InteressesDialog.vue -->
 <template>
   <q-dialog v-model="dialogVisivel" persistent>
-    <q-card style="min-width: 350px">
+    <q-card class="bg-white text-black" style="min-width: 350px">
       <q-card-section>
-        <div class="text-h6">Selecione seus interesses</div>
+        <div class="text-h6 text-center text-weight-bold">Selecione seus interesses</div>
       </q-card-section>
 
       <q-card-section>
         <div v-for="(itens, categoria) in interessesPorCategoria" :key="categoria" class="q-mb-md">
-          <div class="text-subtitle1 q-mb-sm">{{ categoria }}</div>
+          <div class="text-subtitle1 text-weight-medium q-mb-sm">{{ categoria }}</div>
           <q-checkbox
             v-for="item in itens"
             :key="item"
@@ -16,20 +15,37 @@
             :label="item"
             :val="item"
             class="q-ml-md"
+            color="black"
+            keep-color
           />
         </div>
-        <q-banner v-if="erroMinimo" class="q-mt-md bg-red-1 text-negative" dense>
+
+        <q-banner
+          v-if="erroMinimo"
+          class="q-mt-md"
+          rounded
+          dense
+          color="red-1"
+          text-color="negative"
+          icon="warning"
+        >
           Selecione pelo menos 3 interesses para continuar.
         </q-banner>
       </q-card-section>
 
-      <q-card-actions align="right">
+      <q-card-actions align="right" class="q-px-md q-pb-md">
         <q-btn flat label="Cancelar" v-close-popup />
-        <q-btn color="primary" label="Salvar" @click="salvar" />
+        <q-btn
+          label="Salvar"
+          color="black"
+          text-color="white"
+          @click="salvar"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue'

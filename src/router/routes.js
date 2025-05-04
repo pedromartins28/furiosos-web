@@ -11,7 +11,19 @@ const routes = [
       {
         path: '',
         component: () => import('pages/HomePage.vue')
-      }
+      },
+      {
+        path: '/ao-vivo',
+        component: () => import('pages/TwitchLivePage.vue')
+      },
+      {
+        path: '/loja',
+        component: () => import('pages/LojaPage.vue')
+      },
+      {
+        path: '/missoes',
+        component: () => import('pages/MissoesPage.vue')
+      } 
     ]
   },
   {

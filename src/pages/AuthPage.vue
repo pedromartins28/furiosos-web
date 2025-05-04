@@ -1,20 +1,38 @@
 <template>
   <q-page class="q-pa-md flex flex-center">
-    <q-card class="q-pa-md" style="width: 400px;">
-      <q-card-section>
-        <div class="text-h6">Login / Cadastro</div>
-      </q-card-section>
+    <div class="column items-center">
+      <img src="/src/assets/logo.png" alt="Logo" class="q-mb-md logo-img" />
 
-      <q-card-section>
-        <q-input v-model="email" label="Email" type="email" required />
-        <q-input v-model="password" label="Senha" type="password" required class="q-mt-md" />
-      </q-card-section>
+      <q-card class="q-pa-md" style="width: 400px;">
+        <q-card-section>
+          <div class="text-h6 text-center text-weight-bold">Login / Cadastro</div>
+        </q-card-section>
 
-      <q-card-actions align="around">
-        <q-btn label="Entrar" color="primary" @click="signIn" />
-        <q-btn label="Cadastrar" color="secondary" @click="signUp" />
-      </q-card-actions>
-    </q-card>
+        <q-card-section>
+          <q-input v-model="email" label="Email" type="email" required />
+          <q-input v-model="password" label="Senha" type="password" required class="q-mt-md" />
+        </q-card-section>
+
+        <q-card-actions vertical align="center">
+          <q-btn
+            label="Entrar"
+            icon="login"
+            color="black"
+            text-color="white"
+            @click="signIn"
+            class="full-width q-mb-sm"
+          />
+          <q-btn
+            label="Cadastrar"
+            icon="person_add"
+            color="grey-8"
+            text-color="white"
+            @click="signUp"
+            class="full-width"
+          />
+        </q-card-actions>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -97,3 +115,9 @@ async function checkProfile() {
   }
 }
 </script>
+
+<style scoped>
+.logo-img {
+  height: 80px;
+}
+</style>
