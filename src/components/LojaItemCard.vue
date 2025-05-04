@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-mb-md" bordered>
     <q-card-section horizontal>
-      <q-img :src="item.imagem" style="width: 150px;" />
+      <q-img :src="item.imagem" style="width: 200px;" />
 
       <q-card-section class="q-ml-md">
         <div class="text-h6">{{ item.nome }}</div>

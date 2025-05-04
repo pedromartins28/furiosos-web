@@ -36,19 +36,19 @@ const itens = [
     nome: 'Camisa Exclusiva FURIA',
     descricao: 'Camiseta preta oficial da FURIA com edição limitada.',
     preco: 1000,
-    imagem: 'https://via.placeholder.com/150?text=Camisa'
+    imagem: 'assets/logo.png'
   },
   {
     nome: 'Adesivo para PC',
     descricao: 'Adesivo holográfico para colar no seu setup gamer.',
     preco: 300,
-    imagem: 'https://via.placeholder.com/150?text=Adesivo'
+    imagem: 'assets/logo.png'
   },
   {
     nome: 'Wallpaper Animado',
     descricao: 'Download exclusivo de wallpaper animado da FURIA.',
     preco: 150,
-    imagem: 'https://via.placeholder.com/150?text=Wallpaper'
+    imagem: 'assets/logo.png'
   }
 ]
 
