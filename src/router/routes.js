@@ -1,4 +1,3 @@
-// src/router/routes.js
 import MainLayout from 'layouts/MainLayout.vue'
 import AuthLayout from 'layouts/AuthLayout.vue'
 import AuthPage from 'pages/AuthPage.vue'
@@ -36,12 +35,17 @@ const routes = [
       {
         path: '',
         component: () => import('pages/CadastroPage.vue')
-      },
+      }
+    ]
+  },
+  {
+    path: '/politica',
+    component: AuthLayout,
+    children: [
       {
-        path: '/politica',
+        path: '',
         component: () => import('pages/PoliticaPrivacidade.vue')
       }
-      
     ]
   },
   {
@@ -53,6 +57,5 @@ const routes = [
     component: () => import('pages/ErrorNotFound.vue')
   }
 ]
-
 
 export default routes
