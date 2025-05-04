@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-const twitchSrc = `https://player.twitch.tv/?channel=furia&parent=${import.meta.env.VITE_TWITCH_PARENT}`
+const twitchSrc = `https://player.twitch.tv/?channel=furiatv&parent=${import.meta.env.VITE_TWITCH_PARENT}`
 </script>
 
 <style scoped>

@@ -4,7 +4,7 @@
     <q-header elevated class="bg-white text-black header-custom">
       <q-toolbar class="q-px-md q-gutter-md items-center" style="height: 100%; position: relative;">
         <div class="logo-container">
-          <img src="/src/assets/logo-furia.svg" alt="Logo FURIA" height="30" />
+          <img src="assets/logo-furia.svg" alt="Logo FURIA" height="30" />
         </div>
         <q-space />
         <q-btn
@@ -65,7 +65,7 @@ import { supabase } from 'boot/supabase'
 const router = useRouter()
 const drawerExpanded = ref(false)
 const userName = ref('')
-const userAvatar = ref('/src/assets/no_user.png')
+const userAvatar = ref('assets/no_user.png')
 const userLevel = 12
 const userXP = 2450
 const furiaPoints = 1340

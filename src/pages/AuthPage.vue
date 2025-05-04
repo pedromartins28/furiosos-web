@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md flex flex-center">
     <div class="column items-center">
-      <img src="/src/assets/logo.png" alt="Logo" class="q-mb-md logo-img" />
+      <img src="assets/logo.png" alt="Logo" class="q-mb-md logo-img" />
 
       <q-card class="q-pa-md" style="width: 400px;">
         <q-card-section>
