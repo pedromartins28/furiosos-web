@@ -10,8 +10,11 @@
 </template>
 
 <script setup>
+import { supabase } from 'boot/supabase'
+
 const clientId = import.meta.env.VITE_INSTAGRAM_CLIENT_ID
 const redirectUri = import.meta.env.VITE_INSTAGRAM_REDIRECT_URI
+
 const { data } = await supabase.auth.getUser()
 const userId = data?.user?.id
 
@@ -24,10 +27,8 @@ const escopo = [
 ].join(',')
 
 function iniciarLoginInstagram() {
-  console.log('clientId:', clientId)
-  console.log('redirectUri:', redirectUri)
 
-  const authUrl = `https://www.instagram.com/oauth/authorize` +
+  const authUrl = `https://api.instagram.com/oauth/authorize` +
     `?enable_fb_login=0` +
     `&force_authentication=1` +
     `&client_id=${clientId}` +
